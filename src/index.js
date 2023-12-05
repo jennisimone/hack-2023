@@ -1,10 +1,19 @@
-import Phaser from 'phaser';
+import * as Phaser from 'phaser';
 
-class MyGame extends Phaser.Scene
+
+const sceneConfig = {
+    active: false,
+    visible: false,
+    key: "Game"
+}
+
+const CANVAS_WIDTH = 960;
+const CANVAS_HEIGHT = 640
+class GameScene extends Phaser.Scene
 {
     constructor ()
     {
-        super();
+        super(sceneConfig);
     }
 
     preload ()
@@ -19,14 +28,26 @@ class MyGame extends Phaser.Scene
         const tileset = this.map.addTilesetImage("Background", "interior-tiles");
         this.layer = this.map.createLayer("Tile Layer 1", tileset, 0, 0);
     }
+
+    update ()
+    {
+
+    }
 }
 
-const config = {
+const gameConfig = {
+    title: "NomNom Dash",
     type: Phaser.AUTO,
-    parent: 'phaser-example',
-    width: 960,
-    height: 640,
-    scene: MyGame
+    render: {
+        antialias: false
+    },
+    parent: 'game',
+    scale: {
+        width: CANVAS_WIDTH,
+        height: CANVAS_HEIGHT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    scene: GameScene
 };
 
-const game = new Phaser.Game(config);
+const game = new Phaser.Game(gameConfig);
