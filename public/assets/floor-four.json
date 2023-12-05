@@ -32,9 +32,42 @@
          "width":30,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":2,
+         "name":"room",
+         "objects":[
+                {
+                 "height":30.4338594380352,
+                 "id":1,
+                 "name":"golf",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":30.4338594380353,
+                 "x":288.551874740056,
+                 "y":61.5855826052243
+                }, 
+                {
+                 "height":30.4339,
+                 "id":2,
+                 "name":"colt",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":30.4339,
+                 "x":448.368583300304,
+                 "y":255.148964077429
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":2,
- "nextobjectid":1,
+ "nextlayerid":3,
+ "nextobjectid":3,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
