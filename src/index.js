@@ -11,7 +11,10 @@ class MyGame extends Phaser.Scene
     preload ()
     {
         this.load.image("interior-tiles", "assets/office-interior.png");
-        this.load.tilemapTiledJSON("background", "assets/floor-four.json");
+        this.load.image("interior-props", "assets/office-objects.png");
+        this.load.tilemapTiledJSON("floor4", "assets/floor4.json");
+        this.load.tilemapTiledJSON("floor5", "assets/floor5.json");
+        this.load.tilemapTiledJSON("floor6", "assets/floor6.json");
         this.load.spritesheet("Donuts", "assets/donuts.png", {frameHeight: 32, frameWidth: 32})
         this.load.spritesheet("Kebabs", "assets/kebabs.png", {frameHeight: 32, frameWidth: 32})
         this.load.spritesheet("Pizza", "assets/pizza.png", {frameHeight: 32, frameWidth: 32})
@@ -19,10 +22,14 @@ class MyGame extends Phaser.Scene
       
     create ()
     {
-        this.map = this.make.tilemap({key: "background"});
-        const tileset = this.map.addTilesetImage("Background", "interior-tiles");
-        this.layer = this.map.createLayer("Tile Layer 1", tileset, 0, 0);
-        const rooms = this.map.getObjectLayer("room").objects;
+        this.map = this.make.tilemap({key: "floor4"});
+        const interiorTileset = this.map.addTilesetImage("OfficeInterior", "interior-tiles");
+        const objectTileset = this.map.addTilesetImage("office-props", "interior-props");
+        const floorLayer = this.map.createLayer("Floor", interiorTileset, 0, 0);
+        const wallLayer = this.map.createLayer("Walls", interiorTileset, 0, 0);
+        const propsLayer = this.map.createLayer("Props", objectTileset, 0, 0);
+        const rooms = this.map.getObjectLayer("Room").objects;
+        const stairs = this.map.getObjectLayer("Stairs").objects;
         this.alertTime(rooms)
     }
 
@@ -61,9 +68,15 @@ class MyGame extends Phaser.Scene
 const config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
-    width: 960,
-    height: 640,
-    scene: MyGame
+
+    scene: MyGame,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        width: '120%',
+        height: '120%',
+
+
+    }
 };
 
 const game = new Phaser.Game(config);
