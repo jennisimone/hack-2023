@@ -1,11 +1,20 @@
-import Phaser from 'phaser';
+import * as Phaser from 'phaser';
 
-class MyGame extends Phaser.Scene
+
+const sceneConfig = {
+    active: false,
+    visible: false,
+    key: "Game"
+}
+
+const CANVAS_WIDTH = 960;
+const CANVAS_HEIGHT = 640
+class GameScene extends Phaser.Scene
 {
     currentlyAlerting = false;
     constructor ()
     {
-        super();
+        super(sceneConfig);
     }
 
     preload ()
@@ -63,20 +72,26 @@ class MyGame extends Phaser.Scene
     eatFood(player, food) {
         food.destroy(true);
     }
-}
 
-const config = {
-    type: Phaser.AUTO,
-    parent: 'phaser-example',
-
-    scene: MyGame,
-    scale: {
-        mode: Phaser.Scale.FIT,
-        width: '120%',
-        height: '120%',
-
+    update ()
+    {
 
     }
+}
+
+const gameConfig = {
+    title: "NomNom Dash",
+    type: Phaser.AUTO,
+    render: {
+        antialias: false
+    },
+    parent: 'game',
+    scale: {
+        width: CANVAS_WIDTH,
+        height: CANVAS_HEIGHT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    scene: GameScene
 };
 
-const game = new Phaser.Game(config);
+const game = new Phaser.Game(gameConfig);
