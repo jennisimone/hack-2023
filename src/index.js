@@ -1,43 +1,39 @@
-import * as Phaser from 'phaser';
-
+import * as Phaser from "phaser";
 
 const sceneConfig = {
-    active: false,
-    visible: false,
-    key: "Game"
-}
+  active: false,
+  visible: false,
+  key: "Game",
+};
 
 const CANVAS_WIDTH = 960;
-const CANVAS_HEIGHT = 640
-class GameScene extends Phaser.Scene
-{
-    currentlyAlerting = false;
-    constructor ()
-    {
-        super(sceneConfig);
-    }
+const CANVAS_HEIGHT = 640;
+export class GameScene extends Phaser.Scene {
+  currentlyAlerting = false;constructor() {
+    super(sceneConfig);
+  }
 
-    preload ()
-    {
-        this.load.image("interior-tiles", "assets/office-interior.png");
-        this.load.image("interior-props", "assets/office-objects.png");
+  static TILE_SIZE = 48;
+
+  preload() {
+    this.load.image("interior-tiles", "assets/office-interior.png");
+    this.load.image("interior-props", "assets/office-objects.png");
         this.load.tilemapTiledJSON("floor4", "assets/floor4.json");
         this.load.tilemapTiledJSON("floor5", "assets/floor5.json");
         this.load.tilemapTiledJSON("floor6", "assets/floor6.json");
         this.load.spritesheet("Donuts", "assets/donuts.png", {frameHeight: 32, frameWidth: 32})
         this.load.spritesheet("Kebabs", "assets/kebabs.png", {frameHeight: 32, frameWidth: 32})
         this.load.spritesheet("Pizza", "assets/pizza.png", {frameHeight: 32, frameWidth: 32})
-    }
-      
-    create ()
-    {
-        this.map = this.make.tilemap({key: "floor4"});
-        const interiorTileset = this.map.addTilesetImage("OfficeInterior", "interior-tiles");
-        const objectTileset = this.map.addTilesetImage("office-props", "interior-props");
+  }
+
+  create() {
+    this.map = this.make.tilemap({ key: "floor4" });
+    const interiorTileset = this.map.addTilesetImage("OfficeInterior", "interior-tiles");
+    const objectTileset = this.map.addTilesetImage("office-props", "interior-props");
         const floorLayer = this.map.createLayer("Floor", interiorTileset, 0, 0);
         const wallLayer = this.map.createLayer("Walls", interiorTileset, 0, 0);
         const propsLayer = this.map.createLayer("Props", objectTileset, 0, 0);
-        const rooms = this.map.getObjectLayer("Room").objects;
+  const rooms = this.map.getObjectLayer("Room").objects;
         const stairs = this.map.getObjectLayer("Stairs").objects;
         this.alertTime(rooms)
     }
@@ -73,25 +69,22 @@ class GameScene extends Phaser.Scene
         food.destroy(true);
     }
 
-    update ()
-    {
-
-    }
+  update() {}
 }
 
 const gameConfig = {
-    title: "NomNom Dash",
-    type: Phaser.AUTO,
-    render: {
-        antialias: false
-    },
-    parent: 'game',
-    scale: {
-        width: CANVAS_WIDTH,
-        height: CANVAS_HEIGHT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
-    },
-    scene: GameScene
+  title: "NomNom Dash",
+  type: Phaser.AUTO,
+  render: {
+    antialias: false,
+  },
+  parent: "game",
+  scale: {
+    width: CANVAS_WIDTH,
+    height: CANVAS_HEIGHT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
+  scene: GameScene,
 };
 
-const game = new Phaser.Game(gameConfig);
+export const game = new Phaser.Game(gameConfig);
