@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import logoImg from './assets/logo.png';
 
 class MyGame extends Phaser.Scene
 {
@@ -10,35 +9,23 @@ class MyGame extends Phaser.Scene
 
     preload ()
     {
-        //  This is an example of a bundled image:
-        this.load.image('logo', logoImg);
-
-        //  This is an example of loading a static image from the public folder:
-        this.load.image('background', 'assets/bg.jpg');
+        this.load.image("interior-tiles", "assets/office-interior.png");
+        this.load.tilemapTiledJSON("background", "assets/floor-four.json");
     }
       
     create ()
     {
-        this.add.image(400, 300, 'background');
-
-        const logo = this.add.image(400, 150, 'logo');
-      
-        this.tweens.add({
-            targets: logo,
-            y: 450,
-            duration: 2000,
-            ease: "Power2",
-            yoyo: true,
-            loop: -1
-        });
+        this.map = this.make.tilemap({key: "background"});
+        const tileset = this.map.addTilesetImage("Background", "interior-tiles");
+        this.layer = this.map.createLayer("Tile Layer 1", tileset, 0, 0);
     }
 }
 
 const config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
-    width: 800,
-    height: 600,
+    width: 960,
+    height: 640,
     scene: MyGame
 };
 
