@@ -1,4 +1,4 @@
-{ "compressionlevel":-1,
+{ "compressionlevel":0,
  "height":60,
  "infinite":false,
  "layers":[
@@ -377,12 +377,30 @@
  "tileheight":16,
  "tilesets":[
         {
+         "columns":16,
          "firstgid":1,
-         "source":"OfficeInterior.tsx"
+         "image":"office-interior.png",
+         "imageheight":224,
+         "imagewidth":256,
+         "margin":0,
+         "name":"OfficeInterior",
+         "spacing":0,
+         "tilecount":224,
+         "tileheight":16,
+         "tilewidth":16
         }, 
         {
+         "columns":16,
          "firstgid":225,
-         "source":"office-props.tsx"
+         "image":"office-objects.png",
+         "imageheight":848,
+         "imagewidth":256,
+         "margin":0,
+         "name":"office-props",
+         "spacing":0,
+         "tilecount":848,
+         "tileheight":16,
+         "tilewidth":16
         }],
  "tilewidth":16,
  "type":"map",
