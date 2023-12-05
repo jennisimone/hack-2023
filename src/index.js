@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 
 class MyGame extends Phaser.Scene
 {
+    currentlyAlerting = false;
     constructor ()
     {
         super();
@@ -25,19 +26,20 @@ class MyGame extends Phaser.Scene
         this.alertTime(rooms)
     }
 
-
     alertTime(rooms) {
-        let randomRoom = rooms[Math.floor(Math.random() * rooms.length)];
+        const randomRoom = rooms[Math.floor(Math.random() * rooms.length)];
         const foods = ["Donuts", "Kebabs", "Pizza"]
+        let currentFood
 
         const alertText = this.add.text(480,20,'').setOrigin(0.5);
-        let randomFood = foods[Math.floor(Math.random() * foods.length)];
+        const randomFood = foods[Math.floor(Math.random() * foods.length)];
 
         const timer = this.add.timeline([{
             at: 500,                // ms
             run: () => {
                 alertText.setText(`Food alert! ${randomFood} outside ${randomRoom.name}`)
-                this.add.sprite(randomRoom.x, randomRoom.y, randomFood)
+                currentFood = this.add.sprite(randomRoom.x, randomRoom.y, randomFood)
+                this.currentlyAlerting = true
             },
         },{
             at: 10000,                // ms
@@ -46,7 +48,13 @@ class MyGame extends Phaser.Scene
             },
         }]);
 
-        timer.play()
+        if (this.currentlyAlerting === false) {
+            timer.play()
+        }
+    }
+
+    eatFood(player, food) {
+        food.destroy(true);
     }
 }
 
