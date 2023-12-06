@@ -5,27 +5,27 @@ import TilemapLayer = Phaser.Tilemaps.TilemapLayer
 import Home from './home'
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
-  active: false,
-  visible: false,
-  key: "Game",
+    active: false,
+    visible: false,
+    key: "Game",
 };
 
 const CANVAS_WIDTH = 960;
 const CANVAS_HEIGHT = 960;
 
 export class GameScene extends Phaser.Scene {
-  constructor() {
-    super(sceneConfig);
-  }
+    constructor() {
+        super(sceneConfig);
+    }
 
-  static readonly TILE_SIZE = 16;
+    static readonly TILE_SIZE = 16;
 
-  currentFood: Phaser.GameObjects.Group;
+    currentFood: Phaser.GameObjects.Sprite;
 
-  private currentlyAlerting = false;
-  private collidingLayers: TilemapLayer[] = [];
-  private player: Player;
-  private playerTwo: Player;
+    private currentlyAlerting = false;
+    private collidingLayers: TilemapLayer[] = [];
+    private player: Player;
+    private playerTwo: Player;
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     music: Phaser.Sound.BaseSound;
 
@@ -34,15 +34,15 @@ export class GameScene extends Phaser.Scene {
         this.loadTilemaps()
         this.loadAudio()
 
-    this.cursors = this.input.keyboard.createCursorKeys();
+        this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.loadAudio()
-  }
+        this.loadAudio()
+    }
 
-  public create() {
-    const {floorLayer, rooms} = this.createTilemaps()
+    public create() {
+        const {floorLayer, rooms} = this.createTilemaps()
 
-    this.physics.world.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        this.physics.world.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
         this.setupPlayerOne()
         this.setupPlayerTwo()
@@ -52,6 +52,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     public update(_time: number, delta: number) {
+
         if (this.player != undefined) {
             if (this.input.keyboard.addKey('A').isDown) {
                 this.player.moveLeft();
@@ -82,17 +83,19 @@ export class GameScene extends Phaser.Scene {
         }
     }
 
-    private setupPlayerOne() {this.player = new Player({
-      scene: this,
-      x: 400,
-      y: 200,
-      texture: "player",
-    });
-    this.player.init();
+    private setupPlayerOne() {
+        this.player = new Player({
+            scene: this,
+            x: 400,
+            y: 200,
+            texture: "player",
+        });
+        this.player.init();
         this.cameras.main.setSize(CANVAS_WIDTH / 2, CANVAS_HEIGHT)
-    this.cameras.main.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
-    this.cameras.main.startFollow(this.player);
-    this.cameras.main.roundPixels = true;}
+        this.cameras.main.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        this.cameras.main.startFollow(this.player);
+        this.cameras.main.roundPixels = true;
+    }
 
     private setupPlayerTwo() {
         this.playerTwo = new Player({
@@ -113,10 +116,8 @@ export class GameScene extends Phaser.Scene {
         this.physics.world.gravity.y = 0
         this.physics.world.fixedStep = false
 
-      this.physics.add.collider(this.player, floorLayer);
+        this.physics.add.collider(this.player, floorLayer);
         this.physics.add.collider(this.playerTwo, floorLayer);
-
-      this.physics.add.overlap(this.player, this.currentFood, this.eatFood, null, this)
 
         this.collidingLayers.forEach((layer) => {
             layer.setCollisionByProperty({collides: true})
@@ -128,64 +129,66 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
-  private setupAudio() {
-    if (!this.music) {
-      this.music =
-        this.sound.add("music", {loop: true, volume: 0.5})
-      }
+    private setupAudio() {
+        if (!this.music) {
+            this.music =
+                this.sound.add("music", {loop: true, volume: 0.1})
+            this.sound.add('eating', {loop: false, volume: 0.2})
+        }
         if (!this.music.isPlaying) {
-      this.music.play();
+            this.music.play();
+        }
     }
-  }
 
-//   Audio
-  private loadAudio() {
-    this.load.audio('eating', 'assets/eating.mp3');
-  }
-
-  private playEatingSfx(): void {
-    this.sound.add('eating', { loop: false }).play();
-  }
-
-  eatFood() {
-    // add +1 to score
-
-    // play eating sound
-    this.playEatingSfx()
-};
-
-  alertTime(rooms: TiledObject[]) {
-    const randomRoom = rooms[Math.floor(Math.random() * rooms.length)];
-    const foods = ["Donuts", "Kebabs", "Pizza"];
-    let currentFood;
-
-    const alertText = this.add.text(480, 20, "").setOrigin(0.5);
-    const randomFood = foods[Math.floor(Math.random() * foods.length)];
-
-    const timer = this.add.timeline([
-      {
-        at: 500, // ms
-        run: () => {
-          alertText.setText(
-            `Food alert! ${randomFood} outside ${randomRoom.name}`
-          );
-          currentFood = this.add.sprite(randomRoom.x, randomRoom.y, randomFood);
-          this.currentFood = this.add.group();
-          this.currentlyAlerting = true;
-        },
-      },
-      {
-        at: 10000, // ms
-        run: () => {
-          alertText.setText("");
-        },
-      },
-    ]);
-
-    if (this.currentlyAlerting === false) {
-      timer.play();
+    private playEatingSfx(): void {
+        this.sound.play("eating")
     }
-  }private createTilemaps() {
+
+    eatFood() {
+        // add +1 to score
+        console.log("trying to eat")
+        this.currentFood.destroy()
+        // play eating sound
+        this.playEatingSfx()
+    };
+
+    alertTime(rooms: TiledObject[]) {
+        const randomRoom = rooms[Math.floor(Math.random() * rooms.length)];
+        const foods = ["Donuts", "Kebabs", "Pizza"];
+
+        const alertText = this.add.text(480, 20, "").setOrigin(0.5);
+        const randomFood = foods[Math.floor(Math.random() * foods.length)];
+
+        const timer = this.add.timeline([
+            {
+                at: 500, // ms
+                run: () => {
+                    alertText.setText(
+                        `Food alert! ${randomFood} outside ${randomRoom.name}`
+                    );
+                    this.currentFood = this.add.sprite(randomRoom.x, randomRoom.y, randomFood);
+                    this.physics.world.enableBody(this.currentFood)
+
+                    this.physics.add.collider(this.player, this.currentFood, this.eatFood, null, this)
+                    this.physics.add.collider(this.playerTwo, this.currentFood, this.eatFood, null, this)
+
+                    this.currentlyAlerting = true;
+                },
+            },
+            {
+                at: 10000, // ms
+                run: () => {
+                    alertText.setText("");
+                },
+            },
+        ]);
+
+        if (this.currentlyAlerting === false) {
+            timer.play();
+        }
+    }
+
+    private createTilemaps() {
         const map = this.make.tilemap({key: "floor4"});
         const interiorTileset = map.addTilesetImage("OfficeInterior", "interior-tiles");
         const objectTileset = map.addTilesetImage("office-props", "interior-props");
@@ -225,28 +228,29 @@ export class GameScene extends Phaser.Scene {
 
     private loadAudio() {
         this.load.audio("music", "assets/Hack-2023.wav")
+        this.load.audio('eating', 'assets/eating.mp3');
     }
 }
 
 const gameConfig: Phaser.Types.Core.GameConfig = {
-  title: "NomNom Dash",
-  type: Phaser.AUTO,
-  render: {
-    antialias: false,
-  },
-  parent: "game",
-  physics: {
-    default: "arcade",
-    arcade: {
-      gravity: { y: 0 },
+    title: "NomNom Dash",
+    type: Phaser.AUTO,
+    render: {
+        antialias: false,
     },
-  },
-  scale: {
-    width: CANVAS_WIDTH,
-    height: CANVAS_HEIGHT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
-  },
-  scene: [Home, GameScene],
+    parent: "game",
+    physics: {
+        default: "arcade",
+        arcade: {
+            gravity: {y: 0},
+        },
+    },
+    scale: {
+        width: CANVAS_WIDTH,
+        height: CANVAS_HEIGHT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+    },
+    scene: [Home, GameScene],
 };
 
 export const game = new Phaser.Game(gameConfig);
