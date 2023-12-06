@@ -16,8 +16,8 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.scene.physics.world.enable(this);
 
     this.body
-      .setSize(32, 32)
-      .setOffset(0, 0);
+      .setSize(24, 40)
+      .setOffset(0, 24);
 
     this.displayOriginX = 0.5;
     this.displayOriginY = 0.5;
@@ -29,18 +29,22 @@ export class Player extends Phaser.GameObjects.Sprite {
 
 
   moveUp(): void {
+    this.setFrame(1)
     this.body.setVelocityY(-this.playerSpeed);
   }
 
   moveDown(): void {
+    this.setFrame(0)
     this.body.setVelocityY(this.playerSpeed);
   }
 
   moveLeft(): void {
+    this.setFrame(2)
     this.body.setVelocityX(-this.playerSpeed);
   }
 
   moveRight(): void {
+    this.setFrame(3)
     this.body.setVelocityX(this.playerSpeed);
   }
 
