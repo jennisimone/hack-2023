@@ -2,6 +2,7 @@ import * as Phaser from "phaser";
 import { Player } from "./Player";
 import TiledObject = Phaser.Types.Tilemaps.TiledObject
 import TilemapLayer = Phaser.Tilemaps.TilemapLayer
+import Home from './home'
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
@@ -24,10 +25,12 @@ export class GameScene extends Phaser.Scene {
     private player: Player;
     private playerTwo: Player;
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+    music: Phaser.Sound.BaseSound;
 
     public preload() {
         this.loadImages()
         this.loadTilemaps()
+        this.loadAudio()
         this.cursors = this.input.keyboard.createCursorKeys();
     }
 
@@ -38,6 +41,7 @@ export class GameScene extends Phaser.Scene {
         this.setupPlayerOne()
         this.setupPlayerTwo()
         this.setupPhysics(floorLayer)
+        this.setupAudio()
         this.alertTime(rooms)
     }
 
@@ -118,6 +122,15 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
+    private setupAudio() {
+        if (!this.music) {
+            this.music = this.sound.add("music", {loop: true, volume: 0.5})
+        }
+        if (!this.music.isPlaying) {
+            this.music.play();
+        }
+    }
+
     alertTime(rooms: TiledObject[]) {
         const randomRoom = rooms[Math.floor(Math.random() * rooms.length)];
         const foods = ["Donuts", "Kebabs", "Pizza"]
@@ -183,6 +196,10 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
+    private loadAudio() {
+        this.load.audio("music", "assets/Hack-2023.wav")
+    }
+
 }
 
 const gameConfig: Phaser.Types.Core.GameConfig = {
@@ -203,7 +220,7 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
         height: CANVAS_HEIGHT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: GameScene,
+    scene: [Home, GameScene],
 };
 
 export const game = new Phaser.Game(gameConfig);

@@ -120,7 +120,7 @@ export default class Home extends Phaser.Scene {
     this.input.on(
       'pointerup',
       () => {
-        this.scene.start('MyGame');
+        this.scene.start('Game');
       },
       this,
     );
