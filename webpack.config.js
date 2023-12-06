@@ -1,51 +1,75 @@
 const path = require("path");
-const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const package = require("./package.json");
 
 module.exports = {
-  entry: {
-    app: "./src/main.ts",
-  },
-
+  entry: path.resolve(__dirname, "./src/main.ts"),
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: ["babel-loader"],
+      },
+      {
+        test: /\.ts$/,
         use: "ts-loader",
-        exclude: /node_modules/
-      }
-    ]
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          {
+            loader: "file-loader",
+          },
+        ],
+      },
+      {
+        test: /\.json$/,
+        loader: "json-loader",
+      },
+    ],
   },
-
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "phaser",
+          enforce: true,
+          chunks: "initial",
+        },
+      },
+    },
+  },
   resolve: {
-    extensions: [".ts", ".tsx", ".js"]
+    extensions: [".js", ".ts"],
   },
-
   output: {
-    filename: "app.js",
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, "./dist"),
+    filename: "[name].[chunkhash].js",
+    chunkFilename: "[name].[chunkhash].js",
+    clean: true,
   },
-
-  mode: "development",
-
   devServer: {
-    contentBase: path.resolve(__dirname, "dist"),
-    https: true
+    static: path.resolve(__dirname, "./dist"),
   },
-
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, "index.html").replace(/\\/g, '/'),
-          to: path.resolve(__dirname, "dist").replace(/\\/g, '/')
+          from: "public/assets/",
+          to: "assets/",
         },
-        {
-          from: path.resolve(__dirname, "./public/assets", "**", "*").replace(/\\/g, '/'),
-          to: path.resolve(__dirname, "dist").replace(/\\/g, '/')
-        }
-      ]
-    })
+      ],
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, "./index.html"),
+      filename: "index.html",
+      title: package.description,
+      inject: "body",
+      hot: true,
+    }),
   ],
-
 };
