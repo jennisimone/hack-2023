@@ -20,6 +20,8 @@ export class GameScene extends Phaser.Scene {
 
   static readonly TILE_SIZE = 16;
 
+  currentFood: Phaser.GameObjects.Group;
+
   private currentlyAlerting = false;
   private collidingLayers: TilemapLayer[] = [];
   private player: Player;
@@ -31,8 +33,11 @@ export class GameScene extends Phaser.Scene {
         this.loadImages()
         this.loadTilemaps()
         this.loadAudio()
-        this.cursors = this.input.keyboard.createCursorKeys();
-    }
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.loadAudio()
+  }
 
   public create() {
     const {floorLayer, rooms} = this.createTilemaps()
@@ -108,8 +113,10 @@ export class GameScene extends Phaser.Scene {
         this.physics.world.gravity.y = 0
         this.physics.world.fixedStep = false
 
-        this.physics.add.collider(this.player, floorLayer);
+      this.physics.add.collider(this.player, floorLayer);
         this.physics.add.collider(this.playerTwo, floorLayer);
+
+      this.physics.add.overlap(this.player, this.currentFood, this.eatFood, null, this)
 
         this.collidingLayers.forEach((layer) => {
             layer.setCollisionByProperty({collides: true})
@@ -131,6 +138,22 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
+//   Audio
+  private loadAudio() {
+    this.load.audio('eating', 'assets/eating.mp3');
+  }
+
+  private playEatingSfx(): void {
+    this.sound.add('eating', { loop: false }).play();
+  }
+
+  eatFood() {
+    // add +1 to score
+
+    // play eating sound
+    this.playEatingSfx()
+};
+
   alertTime(rooms: TiledObject[]) {
     const randomRoom = rooms[Math.floor(Math.random() * rooms.length)];
     const foods = ["Donuts", "Kebabs", "Pizza"];
@@ -147,6 +170,7 @@ export class GameScene extends Phaser.Scene {
             `Food alert! ${randomFood} outside ${randomRoom.name}`
           );
           currentFood = this.add.sprite(randomRoom.x, randomRoom.y, randomFood);
+          this.currentFood = this.add.group();
           this.currentlyAlerting = true;
         },
       },
