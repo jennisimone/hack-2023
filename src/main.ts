@@ -5,25 +5,25 @@ import TilemapLayer = Phaser.Tilemaps.TilemapLayer
 import Home from './home'
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
-    active: false,
-    visible: false,
-    key: "Game",
+  active: false,
+  visible: false,
+  key: "Game",
 };
 
 const CANVAS_WIDTH = 960;
 const CANVAS_HEIGHT = 960;
 
 export class GameScene extends Phaser.Scene {
-    constructor() {
-        super(sceneConfig);
-    }
+  constructor() {
+    super(sceneConfig);
+  }
 
-    static readonly TILE_SIZE = 16;
+  static readonly TILE_SIZE = 16;
 
-    private currentlyAlerting = false;
-    private collidingLayers: TilemapLayer[] = [];
-    private player: Player;
-    private playerTwo: Player;
+  private currentlyAlerting = false;
+  private collidingLayers: TilemapLayer[] = [];
+  private player: Player;
+  private playerTwo: Player;
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     music: Phaser.Sound.BaseSound;
 
@@ -34,9 +34,10 @@ export class GameScene extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
     }
 
-    public create() {
-        const {floorLayer, rooms} = this.createTilemaps()
-        this.physics.world.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+  public create() {
+    const {floorLayer, rooms} = this.createTilemaps()
+
+    this.physics.world.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
         this.setupPlayerOne()
         this.setupPlayerTwo()
@@ -76,19 +77,17 @@ export class GameScene extends Phaser.Scene {
         }
     }
 
-    private setupPlayerOne() {
-        this.player = new Player({
-            scene: this,
-            x: 400,
-            y: 200,
-            texture: "player"
-        });
-        this.player.init()
+    private setupPlayerOne() {this.player = new Player({
+      scene: this,
+      x: 400,
+      y: 200,
+      texture: "player",
+    });
+    this.player.init();
         this.cameras.main.setSize(CANVAS_WIDTH / 2, CANVAS_HEIGHT)
-        this.cameras.main.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-        this.cameras.main.startFollow(this.player);
-        this.cameras.main.roundPixels = true;
-    }
+    this.cameras.main.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
+    this.cameras.main.startFollow(this.player);
+    this.cameras.main.roundPixels = true;}
 
     private setupPlayerTwo() {
         this.playerTwo = new Player({
@@ -122,43 +121,47 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
-    private setupAudio() {
-        if (!this.music) {
-            this.music = this.sound.add("music", {loop: true, volume: 0.5})
-        }
+  private setupAudio() {
+    if (!this.music) {
+      this.music =
+        this.sound.add("music", {loop: true, volume: 0.5})
+      }
         if (!this.music.isPlaying) {
-            this.music.play();
-        }
+      this.music.play();
     }
+  }
 
-    alertTime(rooms: TiledObject[]) {
-        const randomRoom = rooms[Math.floor(Math.random() * rooms.length)];
-        const foods = ["Donuts", "Kebabs", "Pizza"]
-        let currentFood
+  alertTime(rooms: TiledObject[]) {
+    const randomRoom = rooms[Math.floor(Math.random() * rooms.length)];
+    const foods = ["Donuts", "Kebabs", "Pizza"];
+    let currentFood;
 
-        const alertText = this.add.text(480, 20, '').setOrigin(0.5);
-        const randomFood = foods[Math.floor(Math.random() * foods.length)];
+    const alertText = this.add.text(480, 20, "").setOrigin(0.5);
+    const randomFood = foods[Math.floor(Math.random() * foods.length)];
 
-        const timer = this.add.timeline([{
-            at: 500,                // ms
-            run: () => {
-                alertText.setText(`Food alert! ${randomFood} outside ${randomRoom.name}`)
-                currentFood = this.add.sprite(randomRoom.x, randomRoom.y, randomFood)
-                this.currentlyAlerting = true
-            },
-        }, {
-            at: 10000,                // ms
-            run: () => {
-                alertText.setText('')
-            },
-        }]);
+    const timer = this.add.timeline([
+      {
+        at: 500, // ms
+        run: () => {
+          alertText.setText(
+            `Food alert! ${randomFood} outside ${randomRoom.name}`
+          );
+          currentFood = this.add.sprite(randomRoom.x, randomRoom.y, randomFood);
+          this.currentlyAlerting = true;
+        },
+      },
+      {
+        at: 10000, // ms
+        run: () => {
+          alertText.setText("");
+        },
+      },
+    ]);
 
-        if (this.currentlyAlerting === false) {
-            timer.play()
-        }
+    if (this.currentlyAlerting === false) {
+      timer.play();
     }
-
-    private createTilemaps() {
+  }private createTilemaps() {
         const map = this.make.tilemap({key: "floor4"});
         const interiorTileset = map.addTilesetImage("OfficeInterior", "interior-tiles");
         const objectTileset = map.addTilesetImage("office-props", "interior-props");
@@ -199,28 +202,27 @@ export class GameScene extends Phaser.Scene {
     private loadAudio() {
         this.load.audio("music", "assets/Hack-2023.wav")
     }
-
 }
 
 const gameConfig: Phaser.Types.Core.GameConfig = {
-    title: "NomNom Dash",
-    type: Phaser.AUTO,
-    render: {
-        antialias: false,
+  title: "NomNom Dash",
+  type: Phaser.AUTO,
+  render: {
+    antialias: false,
+  },
+  parent: "game",
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: { y: 0 },
     },
-    parent: "game",
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: {y: 0},
-        },
-    },
-    scale: {
-        width: CANVAS_WIDTH,
-        height: CANVAS_HEIGHT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-    },
-    scene: [Home, GameScene],
+  },
+  scale: {
+    width: CANVAS_WIDTH,
+    height: CANVAS_HEIGHT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
+  scene: [Home, GameScene],
 };
 
 export const game = new Phaser.Game(gameConfig);
