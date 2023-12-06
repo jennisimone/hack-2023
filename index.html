@@ -3,13 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <title>Super fun hack food race game</title>
+    <link rel="preload" as="font" href="./public/assets/PressStart2P-Regular.ttf" type="font/ttf" />
     <style>
+      @font-face {
+  font-family: PressStart2P-Regular;
+  src: url('/assets/PressStart2P-Regular.ttf');
+}
       body {
         background: black;
       }
     </style>
   </head>
   <body>
+    <div style="font-family: 'PressStart2P-Regular'; position: absolute; left:-1000px; visibility:hidden;">.</div>
     <script src="app.js"></script>
   </body>
 </html>
