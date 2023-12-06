@@ -21,8 +21,10 @@ export class GameScene extends Phaser.Scene {
     static readonly TILE_SIZE = 16;
 
     currentFood: Phaser.GameObjects.Sprite;
-
+    // TODO GET ROOMS FUNCTIONALITY WORKING
+    rooms: TiledObject[]
     private currentlyAlerting = false;
+    private score = 0;
     private collidingLayers: TilemapLayer[] = [];
     private player: Player;
     private playerTwo: Player;
@@ -146,8 +148,11 @@ export class GameScene extends Phaser.Scene {
 
     eatFood() {
         // add +1 to score
-        console.log("trying to eat")
+        this.score++
+        // remove currentFood sprite from UI
         this.currentFood.destroy()
+        // add new food sprite to UI
+        // TODO: GET THIS WORKING
         // play eating sound
         this.playEatingSfx()
     };
