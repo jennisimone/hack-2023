@@ -7,31 +7,29 @@ export default class Win extends Phaser.Scene {
       image: undefined,
     };
 
-    private player1Score = 0;
-    private player2Score = 0;
+    private player1Score: number = 0;
+    private player2Score: number = 0;
 
-    
-  constructor() {
-    super('win');
-  }
+    constructor() {
+      super('win');
+    }
 
-  init(player1Score, player2Score) {
-      this.player1Score = player1Score
-      this.player2Score = player2Score
+  init(data) {
+    this.player2Score = data.player2Score
+    this.player1Score = data.player1Score
   }
 
   preload() {
     this.load.image(this.pizza.name, 'assets/pizza.png');
     
   }
-
   create() {
+    
     this.cameras.main.setBackgroundColor('#023020');
     this.pizza.image = this.add.image(465, 195, this.pizza.name).setScale(1.5);
-
+ 
     const winner = this.player1Score > this.player2Score ? 'Player 1' : 'Player 2'
-   console.log(this.player1Score)
-   console.log(this.player2Score)
+  
 
     this.add
       .text(510, 200, `Game Over!`, {
@@ -53,7 +51,25 @@ export default class Win extends Phaser.Scene {
 
 
       this.add
-      .text(500, 600, `Score:`, {
+      .text(250, 560, `Score Player 1:`, {
+        fontFamily: 'PressStart2P-Regular',
+        fontSize: '25px',
+        color: '#fff',
+      })
+      .setOrigin(0.5)
+      .setAlign('center');
+
+      this.add
+      .text(700, 560, `Score Player 2:`, {
+        fontFamily: 'PressStart2P-Regular',
+        fontSize: '25px',
+        color: '#fff',
+      })
+      .setOrigin(0.5)
+      .setAlign('center');
+
+    this.add
+      .text(250, 650, `${this.player1Score}`, {
         fontFamily: 'PressStart2P-Regular',
         fontSize: '50px',
         color: '#fff',
@@ -61,9 +77,8 @@ export default class Win extends Phaser.Scene {
       .setOrigin(0.5)
       .setAlign('center');
 
-
-    this.add
-      .text(490, 675, `700`, {
+      this.add
+      .text(700, 650, `${this.player2Score}`, {
         fontFamily: 'PressStart2P-Regular',
         fontSize: '50px',
         color: '#fff',
@@ -84,7 +99,7 @@ export default class Win extends Phaser.Scene {
     this.input.on(
       'pointerup',
       () => {
-        this.scene.start('MyGame');
+        this.scene.start('Home');
       },
       this,
     );

@@ -1,6 +1,13 @@
 import 'phaser';
 import "./home.css";
 
+
+const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
+  active: false,
+  visible: false,
+  key: "Home",
+};
+
 export default class Home extends Phaser.Scene {
     logo = {
     name: 'logo',
@@ -56,7 +63,7 @@ export default class Home extends Phaser.Scene {
     };
     
   constructor() {
-    super('splash');
+    super(sceneConfig);
   }
 
   preload() {
@@ -91,7 +98,7 @@ export default class Home extends Phaser.Scene {
     this.oranges.image = this.add.image(screenCenterX, 580, this.oranges.name).setScale(1.5);
 
     this.add
-      .text(screenCenterX, screenCenterY + 30, `Collect special items.`, {
+      .text(screenCenterX, 340, `Collect special items.`, {
         fontFamily: 'PressStart2P-Regular',
         color: '#fff',
       })
@@ -99,7 +106,7 @@ export default class Home extends Phaser.Scene {
       .setAlign('center');
 
     this.add
-      .text(screenCenterX, screenCenterY + 80, `Alert race game`, {
+      .text(screenCenterX, 400, `Alert race game`, {
         fontFamily: 'PressStart2P-Regular',
         fontSize: '50px',
         color: '#fff',
