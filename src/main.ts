@@ -3,6 +3,7 @@ import { Player } from "./Player";
 import TiledObject = Phaser.Types.Tilemaps.TiledObject
 import TilemapLayer = Phaser.Tilemaps.TilemapLayer
 import Home from './home'
+import Win from './win'
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
@@ -154,13 +155,15 @@ export class GameScene extends Phaser.Scene {
         if (player === "2") {
             this.player2Score++
         }
-        // add +1 to score
-        // remove currentFood sprite from UI
+
         this.currentFood.destroy()
-        // add new food sprite to UI
-        // TODO: GET THIS WORKING
-        // play eating sound
+
         this.playEatingSfx()
+
+        if(this.player1Score + this.player2Score === 15) {
+            this.scene.start("win", {player1Score: this.player1Score, player2Score: this.player2Score})
+        }
+
         this.currentlyAlerting = false
         this.alertText.setText("")
         this.alertTime()
@@ -264,7 +267,7 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
         height: CANVAS_HEIGHT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [Home, GameScene],
+    scene: [Home, GameScene, Win],
 };
 
 export const game = new Phaser.Game(gameConfig);
