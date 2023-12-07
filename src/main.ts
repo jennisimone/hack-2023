@@ -174,7 +174,7 @@ export class GameScene extends Phaser.Scene {
 
     alertTime() {
         const randomRoom = this.rooms[Math.floor(Math.random() * this.rooms.length)];
-        const foods = ["Donuts", "Kebabs", "Pizza"];
+        const foods = ["Donuts", "Kebabs", "Pizza", "Carrots", "Birthday cake", "Chicken", "Fish", "Ice cream", "Ham", "Oranges", "Pancakes"];
 
         this.alertText = this.add.text(240, 20, "", {
             color: "black",
@@ -242,6 +242,15 @@ export class GameScene extends Phaser.Scene {
         this.load.spritesheet("Donuts", "assets/donuts.png", {frameHeight: 32, frameWidth: 32})
         this.load.spritesheet("Kebabs", "assets/kebabs.png", {frameHeight: 32, frameWidth: 32})
         this.load.spritesheet("Pizza", "assets/pizza.png", {frameHeight: 32, frameWidth: 32})
+        this.load.spritesheet("Carrots", "assets/carrots.png", {frameHeight: 32, frameWidth: 32})
+        this.load.spritesheet("Birthday cake", "assets/bdaycake.png", {frameHeight: 32, frameWidth: 32})
+        this.load.spritesheet("Chicken", "assets/chicken.png", {frameHeight: 32, frameWidth: 32})
+        this.load.spritesheet("Fish", "assets/fish.png", {frameHeight: 32, frameWidth: 32})
+        this.load.spritesheet("Ice cream", "assets/icecream.png", {frameHeight: 32, frameWidth: 32})
+        this.load.spritesheet("Ham", "assets/meat.png", {frameHeight: 32, frameWidth: 32})
+        this.load.spritesheet("Oranges", "assets/oranges.png", {frameHeight: 32, frameWidth: 32})
+        this.load.spritesheet("Pancakes", "assets/pancakes.png", {frameHeight: 32, frameWidth: 32})
+
         this.load.spritesheet("player", "assets/santa32x32.png", {
             frameWidth: 32,
             frameHeight: 64
