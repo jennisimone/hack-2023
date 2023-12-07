@@ -106,7 +106,7 @@ export default class Home extends Phaser.Scene {
       .setAlign('center');
 
     this.add
-      .text(screenCenterX, 400, `Alert race game`, {
+      .text(screenCenterX, 400, `Fast Food Dash`, {
         fontFamily: 'PressStart2P-Regular',
         fontSize: '50px',
         color: '#fff',

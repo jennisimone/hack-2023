@@ -290,12 +290,10 @@ export class GameScene extends Phaser.Scene {
         }
         if (player === "1"){
             this.cameras.main.setBounds(this.cameras.main.getBounds().x + CANVAS_WIDTH, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-            this.cameras.main.startFollow(this.player)
             this.player.x = newX
         }
         if (player === "2"){
             this.playerTwoCamera.setBounds(this.playerTwoCamera.getBounds().x + CANVAS_WIDTH, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-            this.cameras.main.startFollow(this.playerTwo)
             this.playerTwo.x = newX
         }
     }a
