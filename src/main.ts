@@ -139,8 +139,8 @@ export class GameScene extends Phaser.Scene {
     private setupAudio() {
         if (!this.music) {
             this.music =
-                this.sound.add("music", {loop: true, volume: 0.1})
-            this.sound.add('eating', {loop: false, volume: 0.2})
+                this.sound.add("music", {loop: true, volume: 0.4})
+            this.sound.add('eating', {loop: false, volume: 0.6})
         }
         if (!this.music.isPlaying) {
             this.music.play();
