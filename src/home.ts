@@ -115,6 +115,15 @@ export default class Home extends Phaser.Scene {
       .setAlign('center');
 
     this.add
+      .text(screenCenterX, 450, `Player 1: WASD   Player 2: Arrows`, {
+        fontFamily: 'PressStart2P-Regular',
+        fontSize: '15px',
+        color: '#fff',
+      })
+      .setOrigin(0.5)
+      .setAlign('center');
+
+    this.add
       .text(screenCenterX, 500, `Play`, {
         fontFamily: 'PressStart2P-Regular',
         color: '#000000',
