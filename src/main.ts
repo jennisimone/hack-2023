@@ -14,6 +14,7 @@ const CANVAS_WIDTH = 960;
 const CANVAS_HEIGHT = 960;
 
 export class GameScene extends Phaser.Scene {
+    private alertText: Phaser.GameObjects.Text
     constructor() {
         super(sceneConfig);
     }
@@ -21,10 +22,10 @@ export class GameScene extends Phaser.Scene {
     static readonly TILE_SIZE = 16;
 
     currentFood: Phaser.GameObjects.Sprite;
-    // TODO GET ROOMS FUNCTIONALITY WORKING
-    rooms: TiledObject[]
+    rooms: TiledObject[] = []
     private currentlyAlerting = false;
-    private score = 0;
+    private player1Score = 0;
+    private player2Score = 0;
     private collidingLayers: TilemapLayer[] = [];
     private player: Player;
     private playerTwo: Player;
@@ -42,7 +43,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     public create() {
-        const {floorLayer, rooms} = this.createTilemaps()
+        const floorLayer = this.createTilemaps()
 
         this.physics.world.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -50,7 +51,7 @@ export class GameScene extends Phaser.Scene {
         this.setupPlayerTwo()
         this.setupPhysics(floorLayer)
         this.setupAudio()
-        this.alertTime(rooms)
+        this.alertTime()
     }
 
     public update(_time: number, delta: number) {
@@ -146,36 +147,44 @@ export class GameScene extends Phaser.Scene {
         this.sound.play("eating")
     }
 
-    eatFood() {
+    eatFood(player: string) {
+        if (player === "1") {
+            this.player1Score++
+        }
+        if (player === "2") {
+            this.player2Score++
+        }
         // add +1 to score
-        this.score++
         // remove currentFood sprite from UI
         this.currentFood.destroy()
         // add new food sprite to UI
         // TODO: GET THIS WORKING
         // play eating sound
         this.playEatingSfx()
+        this.currentlyAlerting = false
+        this.alertText.setText("")
+        this.alertTime()
     };
 
-    alertTime(rooms: TiledObject[]) {
-        const randomRoom = rooms[Math.floor(Math.random() * rooms.length)];
+    alertTime() {
+        const randomRoom = this.rooms[Math.floor(Math.random() * this.rooms.length)];
         const foods = ["Donuts", "Kebabs", "Pizza"];
 
-        const alertText = this.add.text(480, 20, "").setOrigin(0.5);
+        this.alertText = this.add.text(240, 20, "", {color: "black", backgroundColor: "white"}).setOrigin(0.5).setScrollFactor(0);
         const randomFood = foods[Math.floor(Math.random() * foods.length)];
 
         const timer = this.add.timeline([
             {
                 at: 500, // ms
                 run: () => {
-                    alertText.setText(
+                    this.alertText.setText(
                         `Food alert! ${randomFood} outside ${randomRoom.name}`
                     );
                     this.currentFood = this.add.sprite(randomRoom.x, randomRoom.y, randomFood);
                     this.physics.world.enableBody(this.currentFood)
 
-                    this.physics.add.collider(this.player, this.currentFood, this.eatFood, null, this)
-                    this.physics.add.collider(this.playerTwo, this.currentFood, this.eatFood, null, this)
+                    this.physics.add.collider(this.player, this.currentFood, () => this.eatFood("1"), null, this)
+                    this.physics.add.collider(this.playerTwo, this.currentFood, () => this.eatFood("2"), null, this)
 
                     this.currentlyAlerting = true;
                 },
@@ -183,7 +192,7 @@ export class GameScene extends Phaser.Scene {
             {
                 at: 10000, // ms
                 run: () => {
-                    alertText.setText("");
+                    this.alertText.setText("");
                 },
             },
         ]);
@@ -200,13 +209,13 @@ export class GameScene extends Phaser.Scene {
         const floorLayer = map.createLayer("Floor", interiorTileset, 0, 0);
         const wallLayer = map.createLayer("Walls", interiorTileset, 0, 0);
         const propsLayer = map.createLayer("Props", objectTileset, 0, 0);
-        const rooms = map.getObjectLayer("Room").objects;
+        this.rooms = map.getObjectLayer("Room").objects;
         const stairs = map.getObjectLayer("Stairs").objects;
 
         wallLayer.setCollisionByExclusion([-1], true)
         propsLayer.setCollisionByExclusion([-1], true)
         this.collidingLayers.push(wallLayer, propsLayer)
-        return {floorLayer, rooms}
+        return floorLayer
     }
 
     private loadTilemaps() {
