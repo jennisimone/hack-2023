@@ -197,13 +197,7 @@ export class GameScene extends Phaser.Scene {
 
                     this.currentlyAlerting = true;
                 },
-            },
-            {
-                at: 10000, // ms
-                run: () => {
-                    this.alertText.setText("");
-                },
-            },
+            }
         ]);
 
         if (this.currentlyAlerting === false) {
