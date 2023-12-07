@@ -163,7 +163,7 @@ export class GameScene extends Phaser.Scene {
 
         this.playEatingSfx()
 
-        if (this.player1Score + this.player2Score === 15) {
+        if (this.player1Score + this.player2Score === 5) {
             this.scene.start("win", {player1Score: this.player1Score, player2Score: this.player2Score})
         }
 
